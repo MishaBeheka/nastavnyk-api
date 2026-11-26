@@ -12,6 +12,10 @@ const SEED_USERS: User[] = [
 let users: User[] = [];
 
 export const userRepository = {
+  findById(id: number): User | undefined {
+    return users.find((u) => u.id === id);
+  },
+
   findByEmail(email: string): User | undefined {
     return users.find((u) => u.email === email);
   },
@@ -23,6 +27,13 @@ export const userRepository = {
   create(data: Omit<User, "id">): User {
     const user: User = { id: users.length + 1, ...data };
     users.push(user);
+    return user;
+  },
+
+  updateEmail(id: number, email: string): User {
+    const user = users.find((u) => u.id === id);
+    if (!user) throw new Error(`User ${id} does not exist`);
+    user.email = email;
     return user;
   },
 
